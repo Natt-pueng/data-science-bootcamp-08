@@ -1,0 +1,45 @@
+#Connect to SQL server(postgresql)
+
+library(RPostgreSQL)
+library(tidyverse)
+
+con <- dbConnect(PostgreSQL(),
+host = "[arjuna.db.elephantsql.com](http://arjuna.db.elephantsql.com/)",
+port = 5432,
+user = "yesfvgtm",
+password = "zKUX3utrCa9xqEhnDQoL7ay8kBLkSUR2",
+dbname = "yesfvgtm")
+
+dbListTables(con)
+
+pizza_menu <- data.frame (
+menuid = 1:4,
+name = c("Seafood","Hawaiian","Truffle","Veggie"),
+price = c(300, 200 , 350,250))
+
+customers <- data.frame(cusid = 1:4,
+name = c("Jan","Oat","Tong","May"),
+city = c("Chaingmai","Bangkok","Puket","Bangkok"))
+
+#get data
+
+dbWriteTable(con, "pizza_menu", pizza_menu)
+dbWriteTable(con,"customers",customers)
+
+#create another table
+orderlist <- data.frame(
+orderid = 1:4,
+cusid = c(2,1,3,4),
+menuid =c(3,2,1,4))
+dbWriteTable(con, "orderlist", orderlist)
+
+dbGetQuery(con,"select * from pizza_menu")
+dbGetQuery(con,"select * from customers")
+
+dbListTables(con)
+
+dbRemoveTable(con, "pizza_menu")
+dbRemoveTable(con,"customers")
+
+#close connection
+dbDisconnect(con)

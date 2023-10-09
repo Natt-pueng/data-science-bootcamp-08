@@ -1,0 +1,121 @@
+- 5 Questions ask about the flights’ dataset
+    1. Top 5 origin JFK, how many flights
+     
+        flights %>%
+        filter(origin == "JFK") %>%
+        group_by(carrier) %>%
+        count(origin) %>%
+        arrange(-n) %>%
+        head(5)
+        
+        ---
+        
+        ```
+        # A tibble: 5 × 3
+        # Groups:   carrier [5]
+          carrier origin     n
+        <chr><chr><int>
+        1 B6      JFK    42076
+        2 DL      JFK    20701
+        3 9E      JFK    14651
+        4 AA      JFK    13783
+        5 MQ      JFK     7193
+        ```
+        
+        </aside>
+        
+        2. Which month had maximum the sum of the distance
+             flights %>%
+        select(month,carrier,distance) %>%
+        group_by(month) %>%
+        
+        summarise(sumflight = sum(distance)) %>%
+        arrange(desc(sumflight))
+        
+        ```
+        # A tibble: 12 × 2
+           month sumflight
+        <int><dbl>
+         1     8  31149334
+         2     7  31149199
+         3    10  30012086
+         4     5  29974128
+         5    12  29954084
+         6     6  29856388
+         7     4  29427294
+         8     3  29179636
+         9     9  28711426
+        10    11  28639718
+        11     1  27188805
+        12     2  24975509
+        ```
+        
+        </aside>
+        
+        3. Top 5 route had the most popular in Quarter 1.
+            
+            flights %>%
+            mutate(route = glue("{origin}-{dest}")) %>%
+            select(month,route,carrier) %>%
+            filter(month ==1|month == 2 | month == 3) %>%
+            count(route) %>%
+            arrange(desc(n)) %>%
+            head(5)
+            
+            ```
+            # A tibble: 5 × 2
+              route       n
+            <glue><int>
+            1 JFK-LAX  2731
+            2 LGA-ATL  2565
+            3 JFK-SFO  1934
+            4 LGA-ORD  1801
+            5 EWR-ORD  1470
+            ```
+            
+            </aside>
+            
+        4. Which airline had the highest number of flights to the JFK origin?
+            
+            flights %>%
+            filter(origin == "JFK") %>%
+            select (airline = carrier) %>%
+            count(airline) %>%
+            arrange(desc(n)) %>%
+            head(3)
+            
+            ```
+            # A tibble: 3 × 2
+              airline     n
+            <chr><int>
+            1 B6      42076
+            2 DL      20701
+            3 9E      14651
+            ```
+            
+            </aside>
+            
+        5. Top5, which airline has the most departure delayed?
+            
+                     
+            flights %>%
+            filter(dep_delay > 0) %>%
+            select(carrier , dep_delay) %>%
+            group_by(carrier) %>%
+            summarise(delay_dep = sum(dep_delay)) %>%
+            arrange(desc(delay_dep)) %>%
+            head(5) %>%
+            left_join(airlines, by = "carrier")
+            
+            ```
+            # A tibble: 5 × 3
+              carrier delay_dep name
+            <chr><dbl><chr>
+            1 EV        1164581 ExpressJet Airlines Inc.
+            2 B6         853387 JetBlue Airways
+            3 UA         815818 United Air Lines Inc.
+            4 DL         570017 Delta Air Lines Inc.
+            5 AA         377714 American Airlines Inc.
+            ```
+            
+            </aside>

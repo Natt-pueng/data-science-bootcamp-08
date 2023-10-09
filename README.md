@@ -10,3 +10,5 @@ I learned a lot of stuff related to data science skills. This bootcamp has
 - Python Programming
 - Essential Python for Data Analyst
 - Dashboard
+
+You can find me on Linkedin
